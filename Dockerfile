@@ -1,6 +1,4 @@
-FROM mukherjee/netflix_base:v0
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-
+FROM mukherjee/netflix_base:v1
 MAINTAINER Saikat <sm-azure>
 
 COPY assets/install.sh /root
@@ -12,6 +10,6 @@ RUN     cd /root && \
 RUN     mv /root/install.sh /root/ice/ 
 RUN     chmod +x /root/ice/install.sh && \
 	cd /root/ice && \
-	/bin/bash -c "source install.sh"
+	./install.sh
 
 EXPOSE 8080
