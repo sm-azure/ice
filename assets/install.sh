@@ -4,17 +4,18 @@
 
 GRAILS_VERSION=2.2.1
 
+# Updates not required - done through Dockerfile
 # Install prerequisites
 
-if [ -f /etc/redhat-release ]; then
-    echo "Installing redhat packages"
-    sudo yum -y install git java-1.6.0-openjdk-devel.x86_64 wget unzip
-else
-   [ -f /etc/debian-release ];
-    echo "Installing debian packages"
-    sudo apt-get update	
-    sudo apt-get -y install git openjdk-7-jdk wget unzip
-fi
+#if [ -f /etc/redhat-release ]; then
+#    echo "Installing redhat packages"
+#    sudo yum -y install git java-1.6.0-openjdk-devel.x86_64 wget unzip
+#else
+#   [ -f /etc/debian-release ];
+#    echo "Installing debian packages"
+#    sudo apt-get update
+#    sudo apt-get -y install git openjdk-7-jdk wget unzip
+#fi
 
 INSTALL_DIR=$(pwd)
 
@@ -37,18 +38,23 @@ fi
 GRAILS_HOME=${HOME_DIR}/.grails/wrapper/${GRAILS_VERSION}/grails-${GRAILS_VERSION}/
 PATH=$PATH:${HOME_DIR}/.grails/wrapper/${GRAILS_VERSION}/grails-${GRAILS_VERSION}/bin/
 
+# Export JAVA_HOME
+JAVA_HOME=/usr
+export JAVA_HOME
+
 # Get ice
 cd ${INSTALL_DIR}
 
-if [ -x '.git' ]; then
-  # We already have it; update to latest git
-  git pull
-else
+# Commenting out the git download as already available
+#if [ -x '.git' ]; then
+#  # We already have it; update to latest git
+#  git pull
+#else
   # We don't have it at all yet; clone the repo
-  git clone https://github.com/Netflix/ice.git
-  cd ice
-  INSTALL_DIR=$(pwd)
-fi
+#  git clone https://github.com/Netflix/ice.git
+#  cd ice
+#  INSTALL_DIR=$(pwd)
+#fi
 
 # Initialize Ice with Grails
 grails ${JAVA_OPTS} wrapper
@@ -75,7 +81,8 @@ do
   echo -n "-> "
   read -r PROCBUCKET
 done
-sed -rie 's/=billing_s3bucketprefix\//=/; s|\/mnt\/|'"${HOME_DIR}"'\/|; s/=work_s3bucketprefix\//=/; s/^ice.account.*//; s/=billing_s3bucketname1/='${BILLBUCKET}'/; s/=work_s3bucketname/='${PROCBUCKET}'/' src/java/ice.properties
+# updated sed
+sed -rie 's/=billing_s3bucketprefix\//=/; s|\/mnt\/|'"${HOME_DIR}"'\/|; s/=work_s3bucketprefix\//=/; s/^ice.account.*//; s/=billing_s3bucketname1/='${BILLBUCKET}'/; s/,billing_s3bucketname2/'${XYZ}'/ ; s/=work_s3bucketname/='${PROCBUCKET}'/' src/java/ice.properties
 
 echo Ice is now ready to run as a processor. If you want to run the reader, edit:
 echo ~/ice/src/java/ice.properties
