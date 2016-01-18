@@ -2,7 +2,7 @@
 
 # Get Ice in a ready-to-run state on a fresh AWI instance.
 
-GRAILS_VERSION=2.2.1
+GRAILS_VERSION=2.4.4
 
 # Updates not required - done through Dockerfile
 # Install prerequisites
@@ -68,23 +68,25 @@ mkdir ${HOME_DIR}/ice_reader
 
 # Set up the config file
 cp src/java/sample.properties src/java/ice.properties
-echo Please enter the name of the bucket Ice will read Amazon billing information from:
+
+# Bucket names are expected to be already available
+#echo Please enter the name of the bucket Ice will read Amazon billing information from:
 while [ "$BILLBUCKET" == "" ]
 do
   echo -n "-> "
   read -r BILLBUCKET
 done
 
-echo Please enter the name of the bucket Ice will write processed billing information to:
+#echo Please enter the name of the bucket Ice will write processed billing information to:
 while [ "$PROCBUCKET" == "" ]
 do
   echo -n "-> "
   read -r PROCBUCKET
 done
-# updated sed
-sed -rie 's/=billing_s3bucketprefix\//=/; s|\/mnt\/|'"${HOME_DIR}"'\/|; s/=work_s3bucketprefix\//=/; s/^ice.account.*//; s/=billing_s3bucketname1/='${BILLBUCKET}'/; s/,billing_s3bucketname2/'${XYZ}'/ ; s/=work_s3bucketname/='${PROCBUCKET}'/' src/java/ice.properties
+# updated sed to run later
+#sed -rie 's/=billing_s3bucketprefix\//=/; s|\/mnt\/|'"${HOME_DIR}"'\/|; s/=work_s3bucketprefix\//=/; s/^ice.account.*//; s/=billing_s3bucketname1/='${BILLBUCKET}'/; s/,billing_s3bucketname2/'${XYZ}'/ ; s/=work_s3bucketname/='${PROCBUCKET}'/' src/java/ice.properties
 
-echo Ice is now ready to run as a processor. If you want to run the reader, edit:
-echo ~/ice/src/java/ice.properties
-echo and alter the appropriate flags. You can now start Ice by running the following from the Ice root directory:
-echo ./grailsw -Djava.net.preferIPv4Stack=true -Dice.s3AccessKeyId=\<access key ID\> -Dice.s3SecretKey=\<access key\> run-app
+#echo Ice is now ready to run as a processor. If you want to run the reader, edit:
+#echo ~/ice/src/java/ice.properties
+#echo and alter the appropriate flags. You can now start Ice by running the following from the Ice root directory:
+#echo ./grailsw -Djava.net.preferIPv4Stack=true -Dice.s3AccessKeyId=\<access key ID\> -Dice.s3SecretKey=\<access key\> run-app
