@@ -39,7 +39,7 @@ GRAILS_HOME=${HOME_DIR}/.grails/wrapper/${GRAILS_VERSION}/grails-${GRAILS_VERSIO
 PATH=$PATH:${HOME_DIR}/.grails/wrapper/${GRAILS_VERSION}/grails-${GRAILS_VERSION}/bin/
 
 # Export JAVA_HOME
-JAVA_HOME=/usr
+JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 export JAVA_HOME
 
 # Get ice
